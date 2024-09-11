@@ -208,6 +208,134 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;  // We handled this keypress
 
+
+
+			case KC_I:
+				if (record->event.pressed) {
+					if (get_mods() & MOD_BIT(KC_RALT)) {
+						del_mods(MOD_BIT(KC_RALT));  // Távolítsd el a jobb Alt-ot
+						register_code(KC_UP);        // Regisztrálja a fel kurzort
+                    	set_mods(MOD_BIT(KC_RALT));  // Állítsd vissza a jobb Alt-ot
+					} else {
+						tap_code(KC_I);  // Ellenkező esetben írja be az 'i' betűt
+					}
+				} else {
+					unregister_code(KC_UP);  // Amikor felengeded a gombot, állítsa le a kurzort
+				}
+				return false;
+			case KC_J:
+				if (record->event.pressed) {
+					if (get_mods() & MOD_BIT(KC_RALT)) {
+						del_mods(MOD_BIT(KC_RALT));  // Távolítsd el a jobb Alt-ot
+						register_code(KC_LEFT);      // Regisztrálja a balra kurzort
+						set_mods(MOD_BIT(KC_RALT));  // Állítsd vissza a jobb Alt-ot
+					} else {
+						tap_code(KC_J);  // Ellenkező esetben írja be a 'j' betűt
+					}
+				} else {
+					unregister_code(KC_LEFT);  // Amikor felengeded a gombot, állítsa le a kurzort
+				}
+				return false;
+			case KC_K:
+				if (record->event.pressed) {
+					if (get_mods() & MOD_BIT(KC_RALT)) {
+						del_mods(MOD_BIT(KC_RALT));  // Távolítsd el a jobb Alt-ot
+						register_code(KC_DOWN);      // Regisztrálja a le kurzort
+						set_mods(MOD_BIT(KC_RALT));  // Állítsd vissza a jobb Alt-ot
+					} else {
+						tap_code(KC_K);  // Ellenkező esetben írja be a 'k' betűt
+					}
+				} else {
+					unregister_code(KC_DOWN);  // Amikor felengeded a gombot, állítsa le a kurzort
+				}
+				return false;
+			case KC_L:
+				if (record->event.pressed) {
+					if (get_mods() & MOD_BIT(KC_RALT)) {
+						del_mods(MOD_BIT(KC_RALT));  // Távolítsd el a jobb Alt-ot
+						register_code(KC_RIGHT);     // Regisztrálja a jobbra kurzort
+						set_mods(MOD_BIT(KC_RALT));  // Állítsd vissza a jobb Alt-ot
+					} else {
+						tap_code(KC_L);  // Ellenkező esetben írja be az 'l' betűt
+					}
+				} else {
+					unregister_code(KC_RIGHT);  // Amikor felengeded a gombot, állítsa le a kurzort
+				}
+				return false;
+
+
+			case KC_U:
+				if (record->event.pressed) {
+					if (get_mods() & MOD_BIT(KC_RALT)) {
+						del_mods(MOD_BIT(KC_RALT));  // Távolítsd el a jobb Alt-ot
+//						register_code(KC_HOME);      // Regisztrálja a Home gombot
+                    	tap_code(KC_UP);             // Küldd a fel kurzort
+						set_mods(MOD_BIT(KC_RALT));  // Állítsd vissza a jobb Alt-ot
+					} else {
+						tap_code(KC_U);  // Ellenkező esetben írja be az 'u' betűt
+					}
+				} else {
+					unregister_code(KC_HOME);  // Amikor felengeded a gombot, állítsa le a Home-ot
+				}
+				return false;
+
+			case KC_O:
+				if (record->event.pressed) {
+					if (get_mods() & MOD_BIT(KC_RALT)) {
+						del_mods(MOD_BIT(KC_RALT));  // Távolítsd el a jobb Alt-ot
+						register_code(KC_END);       // Regisztrálja az End gombot
+						set_mods(MOD_BIT(KC_RALT));  // Állítsd vissza a jobb Alt-ot
+					} else {
+						tap_code(KC_O);  // Ellenkező esetben írja be az 'o' betűt
+					}
+				} else {
+					unregister_code(KC_END);  // Amikor felengeded a gombot, állítsa le az End-et
+				}
+				return false;
+
+			case KC_P:
+				if (record->event.pressed) {
+					if (get_mods() & MOD_BIT(KC_RALT)) {
+						del_mods(MOD_BIT(KC_RALT));  // Távolítsd el a jobb Alt-ot
+						register_code(KC_PGUP);      // Regisztrálja a Page Up gombot
+						set_mods(MOD_BIT(KC_RALT));  // Állítsd vissza a jobb Alt-ot
+					} else {
+						tap_code(KC_P);  // Ellenkező esetben írja be a 'p' betűt
+					}
+				} else {
+					unregister_code(KC_PGUP);  // Amikor felengeded a gombot, állítsa le a Page Up-ot
+				}
+				return false;
+
+        case KC_SCLN:
+            if (record->event.pressed) {
+                if (get_mods() & MOD_BIT(KC_RALT)) {
+                    del_mods(MOD_BIT(KC_RALT));  // Távolítsd el a jobb Alt-ot
+                    register_code(KC_PGDN);      // Regisztrálja a Page Down gombot
+                    set_mods(MOD_BIT(KC_RALT));  // Állítsd vissza a jobb Alt-ot
+                } else {
+                    tap_code(KC_SCLN);  // Ellenkező esetben írja be a ';' karaktert
+                }
+            } else {
+                unregister_code(KC_PGDN);  // Amikor felengeded a gombot, állítsa le a Page Down-t
+            }
+            return false;
+
+
+        case KC_4:
+            if (record->event.pressed) {
+                if (get_mods() & MOD_BIT(KC_LGUI)) {
+                    del_mods(MOD_BIT(KC_LGUI));  // Távolítsd el a jobb Alt-ot
+                    register_code(KC_5);      // Regisztrálja a Page Down gombot
+                    set_mods(MOD_BIT(KC_LGUI));  // Állítsd vissza a jobb Alt-ot
+                } else {
+                    tap_code(KC_4);  // Ellenkező esetben írja be a ';' karaktert
+                }
+            } else {
+                unregister_code(KC_5);  // Amikor felengeded a gombot, állítsa le a Page Down-t
+            }
+            return false;
+
         // Add other keycodes here if needed
 
     }
