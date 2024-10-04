@@ -1,5 +1,8 @@
-#define TAPPING_TERM 251
+#define TAPPING_TERM 250
 
+// Egy feltételes előfeldolgozási direktíva, amely a forráskódban jelzi,
+// hogy engedélyezni kell a per-key időzítési funkciót.
+// Ez magában a programkódban teszi lehetővé, hogy az egyedi időzítések megadhatók legyenek a különböző gombokhoz.
 #define TAPPING_TERM_PER_KEY
 
 // #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD

@@ -19,7 +19,7 @@
 //#include "print.h"
 //#include "rgblight.h"
 
-bool shift_active = false;
+//bool shift_active = false;
 
 
 // clang-format off
@@ -32,9 +32,7 @@ enum layers {
     WIN_BASE,  // Windows alapértelmezett réteg
     _FN1,      // Funkció rétegek
     _FN2,
-    _FN3,
-    _FN4,
-    _FN5
+    _FN3		// Caps lock gombra
 };
 
 // ---------------------------
@@ -44,7 +42,9 @@ enum {
     TD_Q_TAB,     // Q és Tab között váltás
     TD_UP_HOME,   // Page Up és Home között váltás
     TD_DOWN_END,  // Page Down és End között váltás
-    TD_FN3_ESC,
+    TD_C_CTRL_C,
+    TD_C_CTRL_V,
+//    TD_FN3_ESC,
 
 //    KC_MYSHIFT = SAFE_RANGE,  // A saját egyedi gombodat a SAFE_RANGE után definiáljuk
 };
@@ -71,6 +71,8 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_Q_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_Q, KC_TAB),         // Q és Tab között váltás
     [TD_UP_HOME] = ACTION_TAP_DANCE_DOUBLE(KC_PAGE_UP, KC_HOME),// Page Up és Home között váltás
     [TD_DOWN_END] = ACTION_TAP_DANCE_DOUBLE(KC_PAGE_DOWN, KC_END),// Page Down és End között váltás
+    [TD_C_CTRL_C] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_C), KC_END),// Page Down és End között váltás
+    [TD_C_CTRL_V] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_V), KC_END),// Page Down és End között váltás
 //    [TD_FN3_ESC] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_fn3_esc_finished, dance_fn3_esc_reset),
 };
 
@@ -93,6 +95,7 @@ enum combos {
     QW_SFT,       // Q és W lenyomása Shift-et eredményez
     SD_LAYER,     // S és D lenyomása _FN2 rétegre vált
     SHIFTS_CAPS,  // Bal és jobb Shift együttes lenyomása Caps Lock-ot eredményez
+
 };
 
 // ---------------------------
@@ -131,31 +134,43 @@ void keyboard_post_init_user(void) {
 }
 
 
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case TD(TD_UP_HOME):
+        case TD(TD_DOWN_END):
+            return 300;
+        default:
+            return TAPPING_TERM;  // Az alapértelmezett időzítés
+    }
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [MAC_BASE] = LAYOUT_ansi_69(
+        KC_ESC,   KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,     KC_7,    KC_8,    KC_9,    KC_0,     KC_MINS,     KC_EQL,           KC_BSPC,          KC_RCTL,
+        KC_TAB,   KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    KC_Y,     KC_U,    KC_I,    KC_O,    KC_P,     KC_LBRC,     KC_RBRC,          KC_BSLS,          TD(TD_UP_HOME),
+        MO(_FN3), KC_A,     KC_S,     KC_D,    KC_F,    KC_G,              KC_H,    KC_J,    KC_K,    KC_L,     KC_SCLN,     KC_QUOT,          RCTL_T(KC_ENT),   TD(TD_DOWN_END),
+        KC_LSFT,           KC_Z,     KC_X,    KC_C,    KC_V,    KC_B,     KC_B,    KC_N,    KC_M,    KC_COMM,  KC_DOT,       RCTL_T(KC_SLSH),  KC_RSFT,  KC_UP,
+        KC_LCTL,  KC_LWIN,  KC_LALT,           KC_SPC,           MO(_FN1), MO(_FN2),         KC_SPC,            KC_RALT,     KC_LEFT,          KC_DOWN, KC_RGHT),
+
+   [WIN_BASE] = LAYOUT_ansi_69(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______,          _______,          _______, _______,          _______,          _______,          _______, _______, _______),
-    [WIN_BASE] = LAYOUT_ansi_69(
-        KC_ESC,   KC_1,     KC_2,     KC_3,    KC_4,    KC_5,    KC_6,     KC_7,    KC_8,    KC_9,    KC_0,     KC_MINS,     KC_EQL,   KC_BSPC,          KC_RCTL,
-        KC_TAB,   KC_Q,     KC_W,     KC_E,    KC_R,    KC_T,    KC_Y,     KC_U,    KC_I,    KC_O,    KC_P,     KC_LBRC,     KC_RBRC,  KC_BSLS,          TD(TD_UP_HOME),
-        MO(_FN3), KC_A,     KC_S,     KC_D,    KC_F,    KC_G,              KC_H,    KC_J,    KC_K,    KC_L,     KC_SCLN,     KC_QUOT,  KC_ENT,           TD(TD_DOWN_END),
-        KC_LSFT,           KC_Z,     KC_X,    KC_C,    KC_V,    KC_B,     KC_B,    KC_N,    KC_M,    KC_COMM,  KC_DOT,       RCTL_T(KC_SLSH),  KC_RSFT, KC_UP,
-        KC_LCTL,  KC_LWIN,  KC_LALT,           KC_SPC,           MO(_FN1), MO(_FN2),         KC_SPC,            KC_RALT,     KC_LEFT, KC_DOWN, KC_RGHT),
 
     [_FN1] = LAYOUT_ansi_69(
-        KC_GRV,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL, _______,
-        _______, QK_UNDERGLOW_TOGGLE, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_HUI,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______,          _______,          _______, _______,          _______,          _______,          _______, _______, _______),
+        KC_GRV,                       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL, _______,
+        _______, QK_UNDERGLOW_TOGGLE, _______, _______, _______, _______, _______, KC_7, KC_8, KC_9, _______, _______, _______, _______, RGB_HUI,
+        _______,                      _______, _______, _______, _______, _______, _______, KC_4, KC_5, KC_6, _______, _______, _______, _______,
+        _______,                      _______, _______, _______, _______, _______, _______, _______, KC_1, KC_2, KC_3, _______, _______, _______,
+        _______,                      _______, _______,          _______,          _______, _______,      KC_GRAVE,    _______,          _______, _______, _______),
 
     [_FN2] = LAYOUT_ansi_69(
         _______,  KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, _______, _______, _______, QK_BOOT,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, TO(MAC_BASE),
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, TO(WIN_BASE),
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______,          _______,          _______, _______,          _______,          _______,          _______, _______, _______),
 
@@ -164,28 +179,38 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_UP,   KC_END,   KC_PGUP, _______, _______, _______, _______,
         _______, _______, _______, KC_LCTL, KC_LSFT, _______, _______, KC_LEFT, KC_DOWN, KC_RIGHT, KC_PGDN, _______, _______, _______,
         _______, _______, _______, LCTL(KC_C), LCTL(KC_V), _______, _______, _______, _______, _______,  _______, _______, _______, _______,
-        _______, _______, _______,          _______,          _______, _______,          _______,           _______,          _______, _______, _______),
+        _______, _______, _______,          _______,          _______, _______,          _______,           _______,          _______, _______, _______)
 
-    [_FN4] = LAYOUT_ansi_69(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______,          _______,          _______, _______,          _______,          _______,          _______, _______, _______),
-
-    [_FN5] = LAYOUT_ansi_69(
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______,          _______,          _______, _______,          _______,          _______,          _______, _______, _______)
 };
 
 
+#define MODS_RALT  (MOD_BIT(KC_RALT))  // Jobb Alt modifikátor definiálása
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+
+    switch (keycode) {
+//        case KC_A:
+//            if (record->event.pressed) {
+//                SEND_STRING("ez mi: árvíztűrő tükörfúrógép &*#$<>{[");
+//            }
+//            return false;
+        case LALT(KC_COMM):  // bal Alt + , -> hosszú í
+            if (record->event.pressed) {
+                SEND_STRING(SS_RALT("í"));  // Hosszú "í"
+            }
+            return false;
+        case LALT(KC_4):  // bal Alt + 4 -> $
+            if (record->event.pressed) {
+                SEND_STRING(">");
+            }
+            return false;
+    }
+
     static uint16_t esc_timer;  // Timer for KC_ESC handling
     static bool grv_sent = false;  // Indicates whether KC_GRV has been sent
+
+    uint8_t mod_state = get_mods();  // Jelenlegi modifikátorok lekérdezése
 
     switch (keycode) {
         case KC_ESC:
@@ -209,7 +234,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;  // We handled this keypress
 
 
-
+	      	case KC_I:
+	            if (record->event.pressed & mod_state & MODS_RALT ) {
+    	            tap_code(KC_UP);  // Jobbra Alt + I = Fel
+        	        return false;
+            	}
+            	break;
+/*
 			case KC_I:
 				if (record->event.pressed) {
 					if (get_mods() & MOD_BIT(KC_RALT)) {
@@ -335,7 +366,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_5);  // Amikor felengeded a gombot, állítsa le a Page Down-t
             }
             return false;
-
+*/
         // Add other keycodes here if needed
 
     }
