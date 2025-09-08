@@ -1,5 +1,6 @@
 TAP_DANCE_ENABLE = yes
 
+
 # Engedélyezi a funkciót a build során.
 # Ezzel jelzed a QMK build rendszerének,
 # hogy szeretnéd használni a per-key (egyedi billentyűnkénti) Tap Dance időzítést.
